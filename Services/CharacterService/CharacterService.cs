@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.VisualBasic;
 
 namespace dotnet_rpg.Services.CharacterService
 {
@@ -12,24 +13,36 @@ namespace dotnet_rpg.Services.CharacterService
             new Character{Id =1, Name = "Sam"}
     };
 
-        public async Task<List<Character>> AddCharacter(Character newCharacter)
+        public async Task<ServiceResponse<List<Character>>> AddCharacter(Character newCharacter)
         {
+            var serviceResponse = new ServiceResponse<List<Character>>();
             characters.Add(newCharacter);
-            return characters;
+            serviceResponse.Data = characters;
+            return serviceResponse;
+
+            // characters.Add(newCharacter);
+            // return characters;
         }
 
-        public async Task<List<Character>> GetAllCharactters()
+        public async Task<ServiceResponse<List<Character>>> GetAllCharactters()
         {
-            return characters;
+            var serviceResponse = new ServiceResponse<List<Character>>();
+            serviceResponse.Data = characters;
+            return serviceResponse;
+            // return characters;
         }
 
-        public async Task<Character> GetCharacterById(int id)
+        public async Task<ServiceResponse<Character>> GetCharacterById(int id)
         {
+            var serviceResponse = new ServiceResponse<Character>();
             var character = characters.FirstOrDefault(c => c.Id == id);
-            if (character is not null)
+            serviceResponse.Data = character;
+            return serviceResponse;
+
+            /*if (character is not null)
                 return character;
 
-            throw new Exception("Character Not Found");
+            throw new Exception("Character Not Found");*/
 
             //return characters.FirstOrDefault(character => character.Id == id);
         }
