@@ -2,6 +2,7 @@ global using AutoMapper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.VisualBasic;
 
@@ -61,6 +62,35 @@ namespace dotnet_rpg.Services.CharacterService
             throw new Exception("Character Not Found");*/
 
             //return characters.FirstOrDefault(character => character.Id == id);
+        }
+
+        public async Task<ServiceResponse<GetCharacterDTO>> UpdateCharacter(UpdateCharacterDTO updatedCharacter)
+        {
+            var serviceResponse = new ServiceResponse<GetCharacterDTO>();
+            try
+            {
+                var character = characters.FirstOrDefault(c => c.Id == updatedCharacter.Id);
+                if (character == null)
+                { throw new Exception($"Character with Id '{updatedCharacter.Id}' not found"); }
+
+                // _mapper.Map<Character>(updatedCharacter); updating also possible using automapper
+                // _mapper.Map(UpdateCharacter, character);
+
+                character.Name = updatedCharacter.Name;
+                character.HitPoints = updatedCharacter.HitPoints;
+                character.Strength = updatedCharacter.Strength;
+                character.Defense = updatedCharacter.Defense;
+                character.Class = updatedCharacter.Class;
+                character.Intelligence = updatedCharacter.Intelligence;
+
+                serviceResponse.Data = _mapper.Map<GetCharacterDTO>(character);
+            }
+            catch (Exception ex)
+            {
+                serviceResponse.Success = true;
+                serviceResponse.Message = ex.Message;
+            }
+            return serviceResponse;
         }
     }
 }
