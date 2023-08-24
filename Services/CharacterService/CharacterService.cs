@@ -27,14 +27,17 @@ namespace dotnet_rpg.Services.CharacterService
         {
             var serviceResponse = new ServiceResponse<List<GetCharacterDTO>>();
             var character = _mapper.Map<Character>(newCharacter);
-            character.Id = characters.Max(c => c.Id) + 1;
-            characters.Add(character);
+            //character.Id = characters.Max(c => c.Id) + 1;  //SQLServer does it in auto
+
+            // characters.Add(character);
+            _context.Characters.Add(character);
+            await _context.SaveChangesAsync(); //if you are adding a character using a query with the code above you should delete this line and change Add method with AddAsync
 
             // characters.Add(newCharacter);
             // characters.Add(_mapper.Map<Character>(newCharacter));
 
             // serviceResponse.Data = characters;
-            serviceResponse.Data = characters.Select(c => _mapper.Map<GetCharacterDTO>(c)).ToList();
+            serviceResponse.Data = await _context.Characters.Select(c => _mapper.Map<GetCharacterDTO>(c)).ToListAsync();
             return serviceResponse;
 
             // characters.Add(newCharacter);
