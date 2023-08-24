@@ -10,10 +10,10 @@ namespace dotnet_rpg.Services.CharacterService
 {
     public class CharacterService : ICharacterService
     {
-        private static List<Character> characters = new List<Character>{
-            new Character(),
-            new Character{Id =1, Name = "Sam"}
-    };
+        //     private static List<Character> characters = new List<Character>{
+        //         new Character(),
+        //         new Character{Id =1, Name = "Sam"}
+        // };
         private readonly IMapper _mapper;
         private readonly DataContext _context;
 
@@ -50,12 +50,14 @@ namespace dotnet_rpg.Services.CharacterService
 
             try
             {
-                var character = characters.First(c => c.Id == id);
+                var character = await _context.Characters.FirstOrDefaultAsync(c => c.Id == id);
                 if (character == null)
                     throw new Exception($"Character with Id {id} not found.");
 
-                characters.Remove(character);
-                serviceResponse.Data = characters.Select(c => _mapper.Map<GetCharacterDTO>(c)).ToList();
+                _context.Characters.Remove(character);
+                await _context.SaveChangesAsync();
+
+                serviceResponse.Data = await _context.Characters.Select(c => _mapper.Map<GetCharacterDTO>(c)).ToListAsync();
             }
             catch (Exception ex)
             {
@@ -98,7 +100,7 @@ namespace dotnet_rpg.Services.CharacterService
             var serviceResponse = new ServiceResponse<GetCharacterDTO>();
             try
             {
-                var character = characters.FirstOrDefault(c => c.Id == updatedCharacter.Id);
+                var character = await _context.Characters.FirstOrDefaultAsync(c => c.Id == updatedCharacter.Id);
                 if (character == null)
                 { throw new Exception($"Character with Id '{updatedCharacter.Id}' not found"); }
 
@@ -112,6 +114,7 @@ namespace dotnet_rpg.Services.CharacterService
                 character.Class = updatedCharacter.Class;
                 character.Intelligence = updatedCharacter.Intelligence;
 
+                await _context.SaveChangesAsync();
                 serviceResponse.Data = _mapper.Map<GetCharacterDTO>(character);
             }
             catch (Exception ex)
