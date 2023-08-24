@@ -18,6 +18,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
 builder.Services.AddScoped<ICharacterService, CharacterService>(); //System.InvalidOperationException: Unable to resolve service for type 'dotnet_rpg.Services.ICharacterService' while attempting to activate 'dotnet_rpg.Controllers.CharacterController'.
+builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 
 var app = builder.Build();
 
