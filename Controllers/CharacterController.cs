@@ -4,12 +4,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using dotnet_rpg.Services; //calismazsa bunbu mutlaka kontrol et videoda dk58
+using Microsoft.AspNetCore.Authorization;
 //using dotnet_rpg.Services.CharacterService;
 using Microsoft.AspNetCore.Mvc;
 
 namespace dotnet_rpg.Controllers
 {
-    [ApiController]
+    [Authorize]
     [Route("api/[controller]")] //how to accress controller
     public class CharacterController : ControllerBase
     {
