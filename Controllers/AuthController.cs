@@ -38,6 +38,5 @@ namespace dotnet_rpg.Controllers
                 return BadRequest(response);
             return Ok(response);
         }
-
     }
 }
