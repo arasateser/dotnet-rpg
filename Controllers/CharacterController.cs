@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using dotnet_rpg.Services; //calismazsa bunbu mutlaka kontrol et videoda dk58
 using Microsoft.AspNetCore.Authorization;
@@ -29,7 +30,8 @@ namespace dotnet_rpg.Controllers
         [HttpGet("Get All")]
         public async Task<ActionResult<ServiceResponse<List<GetCharacterDTO>>>> Get()
         {
-            return Ok(await _characterService.GetAllCharactters());
+            int userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)!.Value);
+            return Ok(await _characterService.GetAllCharactters(userId));
         }
 
         [HttpGet("{id}")]
